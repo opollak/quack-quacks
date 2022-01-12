@@ -1,2 +1,2 @@
 web: npm start
-host: npx serve
+host: npm run serve
