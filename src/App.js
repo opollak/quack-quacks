@@ -11,7 +11,7 @@ import { Quacks } from './Game';
 
 //var currentPlayer
 //var randomWords = require('random-words');
-const server = 'http://pollakvpn.asuscomm.com:51514';
+const server = 'http://localhost:8000';
 const importedGames = [{ game: Quacks, board: QQBoard }];
 /*
 const QQClient = Client({
