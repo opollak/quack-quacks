@@ -4,8 +4,14 @@
 
 import path from 'path';
 import serve from 'koa-static';
+const { Server, Origins } = require('boardgame.io/server');
 const Quacks = require('./Game').Quacks;
-const server = require('boardgame.io/server').Server({ games: [Quacks] });
+const server = Server({
+  games: [Quacks],
+  origins:[Origins.LOCALHOST_IN_DEVELOPMENT,
+    'https://quack-quacks.herokuapp.com/',
+  'localhost'] 
+  });
 const PORT = process.env.PORT || 8000;
 
 const frontEndAppBuildPath = path.resolve(__dirname, './build');
