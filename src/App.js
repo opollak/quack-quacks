@@ -11,7 +11,8 @@ import { Quacks } from './Game';
 
 //var currentPlayer
 //var randomWords = require('random-words');
-const server = 'http://localhost:8000';
+const { protocol, hostname, port } = window.location;
+const server = `${protocol}//${hostname}:${port}`;
 const importedGames = [{ game: Quacks, board: QQBoard }];
 /*
 const QQClient = Client({
@@ -29,7 +30,7 @@ export default () => (
     <p><a target="_blank" rel="noopener noreferrer" href="https://www.northstargames.com/collections/strategy-games/products/the-quacks-of-quedlinburg">The Quacks of Quedlinburg</a> is the intellectual property of <a target="_blank" rel="noopener noreferrer" href="https://www.northstargames.com/">North Star Games.</a> This online verison was created by Oren Pollak for personal use only as an homage and programming practice.</p>
     <h2>Enter lobby and join a game</h2>
     <Lobby gameServer={server} lobbyServer={server}
-    gameComponents={importedGames} debug={true}/>
+    gameComponents={importedGames} debug={false}/>
   </div>
 );
 //multiplayer

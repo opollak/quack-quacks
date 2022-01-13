@@ -1,2 +1,1 @@
-web: npm start
-host: npm run serve
+web: node -r esm src/server.js
