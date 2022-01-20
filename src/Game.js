@@ -457,11 +457,11 @@ function playChip1(G, ctx, currentChip, p) {
     ctx.events.setStage('wellStirredStage');
   }
   let a = f+currentChip.number+actionNumber;
-  console.log(currentChip); console.log(f); console.log(actionNumber);
-  console.log("index of next chip is "+a);
+  //console.log(currentChip); console.log(f); console.log(actionNumber);
+  //console.log("index of next chip is "+a);
   if (a > 52) {a = 52;}
   G.players[p].pot[a].chip = currentChip;
-  console.log("drew a chip");
+  //console.log("drew a chip");
   G.players[p].whiteTotal = totalWhites(G.players[p].pot);
   return G;
 }
@@ -469,7 +469,7 @@ function playChip2(G, ctx, currentChip, p) {
   if (G.players[p].whiteTotal > G.whiteMax) {
     ctx.events.endStage();
     G.playersToDraw--;
-    console.log("pot exploded!");
+    //console.log("pot exploded!");
     G.players[p].exploded = true;
   } else if (lastFilled(G.players[p].pot) === 52) {
     ctx.events.endStage();
@@ -719,7 +719,7 @@ class Player {
 }
 
 function createPlayers(num) {
-  console.log("Creating ", num, " player game");
+  //console.log("Creating ", num, " player game");
   let players = [];
   for (let k = 0; k < num; k++) {
     players.push(new Player(k));
@@ -751,7 +751,7 @@ export const Quacks = {
       next: 'drawPhase',
       onBegin: (G, ctx) => {
         G.round++;
-        console.log("card phase started");
+        //console.log("card phase started");
         if (G.round < 10) {
           G.players = messageAll(G.players, "Round "+G.round+" is beginning.");
           G.players = messageAll(G.players, "Player "+((G.round - 1) % ctx.numPlayers)+
@@ -831,7 +831,7 @@ export const Quacks = {
       next: 'strongIngredientPhase',
       onBegin: (G, ctx) => {
         ctx.events.setActivePlayers({all: 'ratStage'});
-        console.log("draw phase started");
+        //console.log("draw phase started");
         G.players = messageAll(G.players, "Draw phase has begun! Take your rats and then click your Bag to draw.");
         G.players = messagesRead(G.players);
         },
@@ -964,7 +964,7 @@ export const Quacks = {
     strongIngredientPhase: { //Beginning with the start player, if you stopped without an explosion, draw up to 5 chips from your bag. You may place 1 of them in your pot.
       next: 'schadenfreudePhase',
       onBegin: (G, ctx) => {
-        console.log("draw phase ended");
+        //console.log("draw phase ended");
         if (G.currCard===22) {
           G.players = messageAll(G.players, "Players who stopped without an explosion will now draw up to 5 chips.");
           G.players = messagesRead(G.players);
@@ -980,7 +980,7 @@ export const Quacks = {
     schadenfreudePhase: { //If your pot explodes this round, the player to your left (before you) gets any one 2-chip.
         next: 'bonusPhase',
         onBegin: (G, ctx) => {
-          console.log("draw phase ended");
+          //console.log("draw phase ended");
           if (G.currCard===23) {
             G.players = messageAll(G.players, "If your pot explodes this round, the player to your left (after you) gets any one 2-chip.");
             G.players = messagesRead(G.players);
@@ -1007,7 +1007,7 @@ export const Quacks = {
     bonusPhase: {
       next: 'actionPhase',
       onBegin: (G, ctx) => {
-        console.log("bonus phase started");
+        //console.log("bonus phase started");
         if (G.currCard===19) {
           for (let i = 0; i < G.players.length; i++) {
             if (G.players[i].whiteTotal===7) {
@@ -1040,14 +1040,14 @@ export const Quacks = {
     actionPhase:{
       next: 'rubyPhase',
       onBegin: (G, ctx) => {
-        console.log("action phase started");
+        //console.log("action phase started");
         },
       endIf: (G, ctx) => (true),
     },
     rubyPhase: {
       next: 'pointPhase',
       onBegin: (G, ctx) => {
-        console.log("action phase started");
+        //console.log("action phase started");
         G = BGPActions.black(G, ctx);
         G = BGPActions.green[G.set](G, ctx);
         G = BGPActions.purple[G.set](G, ctx);
@@ -1058,7 +1058,7 @@ export const Quacks = {
           }
         }
         G.players = messagesRead(G.players);
-        console.log("ruby phase started");
+        //console.log("ruby phase started");
         },
       moves: {
         takeRubies: (G, ctx) => {
@@ -1088,7 +1088,7 @@ export const Quacks = {
       next: 'buyPhase',
       onBegin: (G, ctx) => {
         G.players = messagesRead(G.players);
-        console.log("point phase started");
+        //console.log("point phase started");
       },
       onEnd: (G, ctx) => {
         G = addScore(G);
@@ -1113,7 +1113,7 @@ export const Quacks = {
     buyPhase: {
       next: 'endPhase',
       onBegin: (G, ctx) => {
-        console.log("buy phase started");
+        //console.log("buy phase started");
         for (let i = 0; i < G.players.length; i++) {
           if (G.players[i].pointsOrCoins!=='points') {
             G.players[i].playerCoins = G.players[i].pot[lastFilled(G.players[i].pot)+1].coins;
@@ -1166,7 +1166,7 @@ export const Quacks = {
     endPhase: {
       next: 'cardPhase',
       onBegin: (G, ctx) => {
-        console.log("end phase started");
+        //console.log("end phase started");
         if (G.currCard===18) {
           for (let i = 0; i < G.players.length; i++) {
             G.players[i].flaskFull = true
@@ -1180,7 +1180,7 @@ export const Quacks = {
         G.playersToDraw = ctx.numPlayers;
         G.whiteMax = 7;
         G.players = messagesRead(G.players);
-        console.log("end phase ended");
+        //console.log("end phase ended");
         },
       turn: {
         order: roundTurnOrder,
