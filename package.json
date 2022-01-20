@@ -18,9 +18,9 @@
     "redux-logger": "^3.0.6"
   },
   "scripts": {
-    "start": "node -r esm ./server.js",
+    "start": "node -r esm /app/server.js",
     "client": "react-scripts start",
-    "server": "node -r esm ./server.js",
+    "server": "node -r esm /app/server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
