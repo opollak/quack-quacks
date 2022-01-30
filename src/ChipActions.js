@@ -100,15 +100,15 @@ export const BGPActions = {
           if (isGreen(lastSpot[j])) {
             switch (lastSpot[j].chip.number) {
               case "1":
-                G.players[i].bag.push(new Chip('orange','1'));
+                G.players[i].bag.push(Chip('orange','1'));
                 G.players = messageAll(G.players, "Player "+i+" received an orange 1 chip because of a green 1.");
                 break;
               case "2":
-                G.players[i].bag.push(new Chip('blue','1')); //need to make optional blue/red
+                G.players[i].bag.push(Chip('blue','1')); //need to make optional blue/red
                 G.players = messageAll(G.players, "Player "+i+" received a blue 1 chip because of a green 2.");
                 break;
               case "4":
-                G.players[i].bag.push(new Chip('purple','1')); //need to make optional purple/yellow
+                G.players[i].bag.push(Chip('purple','1')); //need to make optional purple/yellow
                 G.players = messageAll(G.players, "Player "+i+" received a purple 1 chip because of a green 4.");
                 break;
               default:

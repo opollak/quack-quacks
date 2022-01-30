@@ -4,6 +4,8 @@
 
 import path from 'path';
 import serve from 'koa-static';
+import mount from 'koa-mount';
+import Koa from 'koa';
 const { Server, Origins } = require('boardgame.io/server');
 const Quacks = require('./Game').Quacks;
 const server = Server({
@@ -15,13 +17,16 @@ const server = Server({
 const PORT = process.env.PORT || 8000;
 
 const frontEndAppBuildPath = path.resolve(__dirname, './build');
-server.app.use(serve(frontEndAppBuildPath))
+const static_pages = new Koa();
+static_pages.use(serve(frontEndAppBuildPath));
+server.app.use(mount('/', static_pages))
 
 server.run(PORT, () => {
+  console.log('Serving at port: '+PORT);
   server.app.use(
     async (ctx, next) => await serve(frontEndAppBuildPath)(
-      Object.assign(ctx, { path: 'index.html' }),
+      Object.assign(ctx, { path: 'index.js' }),
       next
     )
-  )
+  );
 });

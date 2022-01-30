@@ -1,6 +1,6 @@
 //src/Game.js
 import {INVALID_MOVE} from 'boardgame.io/core';
-import {SetCost, NewStore, RatTails} from './Constants';
+import {NewPlayer, SetCost, NewStore, RatTails} from './Constants';
 import {BGPActions, RedActionNumber} from './ChipActions';
 
 const roundTurnOrder = {
@@ -27,7 +27,7 @@ const buy2Chip = {
           return INVALID_MOVE;
         }
         else {
-          G.players[p].bag.push(new Chip(type,number));
+          G.players[p].bag.push(Chip(type,number));
           G.store[type][number]--;
           G.players = messageAll(G.players, "Player "+ctx.playerID+" took a "+type+" "+number);
           ctx.events.endStage();
@@ -64,7 +64,7 @@ const cardStages = {
         if (G.store.black[1] < 1) {
           G.players = messageAll(G.players, "No more black chips remain.");;
         } else {
-          G.players[p].bag.push(new Chip("black",1));
+          G.players[p].bag.push(Chip("black",1));
           G.store.black[1]--;
           G.players = messageAll(G.players, "Player "+p.toString()+" chose to take 1 black chip.");
           ctx.events.endStage();
@@ -116,7 +116,7 @@ const cardStages = {
           return INVALID_MOVE;
         }
         else {
-          G.players[p].bag.push(new Chip(type,number));
+          G.players[p].bag.push(Chip(type,number));
           G.store[type][number]--;
           G.players = messageAll(G.players, "Player "+ctx.playerID+" took a "+type+" "+number);
           ctx.events.endStage();
@@ -148,7 +148,7 @@ const cardStages = {
         if (G.store.purple[1] < 1) {
           G.players = messageAll(G.players, "No more purple chips remain.");;
         } else {
-          G.players[p].bag.push(new Chip("purple",1));
+          G.players[p].bag.push(Chip("purple",1));
           G.store.purple[1]--;
           G.players = messageAll(G.players, "Player "+p.toString()+" chose to take 1 purple chip.");
           ctx.events.endStage();
@@ -205,7 +205,7 @@ const cardStages = {
           return INVALID_MOVE;
         }
         else {
-          G.players[p].bag.push(new Chip(type,number));
+          G.players[p].bag.push(Chip(type,number));
           G.store[type][number]--;
           G.players = messageAll(G.players, "Player "+ctx.playerID+" took a "+type+" "+number);
           ctx.events.endStage();
@@ -234,7 +234,7 @@ const cardStages = {
             G.players[p].selector.push(currentChip);
             return INVALID_MOVE;
           } else {
-          G.players[p].bag.push(new Chip(type,newnumber));
+          G.players[p].bag.push(Chip(type,newnumber));
           G.store[type][newnumber]--;
           G.store[type][number]++;
           G.players[p].bag.splice(0,0,...G.players[p].selector.splice(0,G.players[p].selector.length));
@@ -249,7 +249,7 @@ const cardStages = {
         if (G.store["green"][1] < 1) {
           G.players[p] = messageOne(G.players[p],"No green 1-chips in the store, sorry.");
         } else {
-        G.players[p].bag.push(new Chip("green",1));
+        G.players[p].bag.push(Chip("green",1));
         G.store["green"][1]--;
         G.players = messageAll(G.players, "Player "+ctx.playerID+" took a green 1-chip");
         }
@@ -268,7 +268,7 @@ const cardStages = {
             G.players[p] = messageOne(G.players[p],"No blue 2-chips in the store, sorry, you get a ruby instead.");
             G.players[p].rubies++;
           } else {
-          G.players[p].bag.push(new Chip("blue",2));
+          G.players[p].bag.push(Chip("blue",2));
           G.store["blue"][2]--;
           G.players = messageAll(G.players, "Player "+ctx.playerID+" took a blue 2-chip");
           }
@@ -557,7 +557,7 @@ function dieRoll(G, d, p) {
     G.players[p].bonusDieDrop++;
     G.players = messageAll(G.players, "Player "+p.toString()+" advanced their droplet from the bonus die, this will take effect after the black/green/purple chip actions are processed.");}
   if (d===6) {
-    G.players[p].bag.push(new Chip("orange",1));
+    G.players[p].bag.push(Chip("orange",1));
     G.store.orange[1]--;
     G.players = messageAll(G.players, "Player "+p.toString()+" received 1 orange 1 chip from the bonus die.");}
   return G;
@@ -595,7 +595,7 @@ function purpleCards (G, ctx) {
         if (G.store.green[1] < 1) {
           G.players = messageAll(G.players, "No more green 1-chips remain.");;
         } else {
-        G.players[i].bag.push(new Chip("green",1));
+        G.players[i].bag.push(Chip("green",1));
         G.store.green[1]--;
         G.players = messageAll(G.players, "Player "+i+" received a green 1-chip.");
         }
@@ -612,117 +612,18 @@ function purpleCards (G, ctx) {
   return G;
 }
 
-export class Chip {
-  constructor(type, number) {
-    this.type = type;
-    this.number = number;
-  }
-}
-
-class Spot {
-  constructor(id,coins,points,ruby) {
-    this.id = id;
-    this.coins = coins;
-    this.points = points;
-    this.ruby = ruby;
-    this.chip = null;
-  }
-}
-
-class Player {
-  constructor(id) {
-  this.id = id;
-  this.bag = [new Chip('white',1),
-        new Chip('white',1),
-        new Chip('white',1),
-        new Chip('white',1),
-        new Chip('white',2),
-        new Chip('white',2),
-        new Chip('white',3),
-        new Chip('orange',1),
-        new Chip('green',1)];
-  this.pot = [new Spot(0,0,0,false),
-              new Spot(1,1,0,false),
-              new Spot(2,2,0,false),
-              new Spot(3,3,0,false),
-              new Spot(4,4,0,false),
-              new Spot(5,5,0,true),
-              new Spot(6,6,1,false),
-              new Spot(7,7,1,false),
-              new Spot(8,8,1,false),
-              new Spot(9,9,1,true),
-              new Spot(10,10,2,false),
-              new Spot(11,11,2,false),
-              new Spot(12,12,2,false),
-              new Spot(13,13,2,true),
-              new Spot(14,14,3,false),
-              new Spot(15,15,3,false),
-              new Spot(16,15,3,true),
-              new Spot(17,16,3,false),
-              new Spot(18,16,4,false),
-              new Spot(19,17,4,false),
-              new Spot(20,17,4,true),
-              new Spot(21,18,4,false),
-              new Spot(22,18,5,false),
-              new Spot(23,19,5,false),
-              new Spot(24,19,5,true),
-              new Spot(25,20,5,false),
-              new Spot(26,20,6,false),
-              new Spot(27,21,6,false),
-              new Spot(28,21,6,true),
-              new Spot(29,22,7,false),
-              new Spot(30,22,7,true),
-              new Spot(31,23,7,false),
-              new Spot(32,23,8,false),
-              new Spot(33,24,8,false),
-              new Spot(34,24,8,true),
-              new Spot(35,25,9,false),
-              new Spot(36,25,9,true),
-              new Spot(37,26,9,false),
-              new Spot(38,26,10,false),
-              new Spot(39,27,10,false),
-              new Spot(40,27,10,true),
-              new Spot(41,28,11,false),
-              new Spot(42,28,11,true),
-              new Spot(43,29,11,false),
-              new Spot(44,29,12,false),
-              new Spot(45,30,12,false),
-              new Spot(46,30,12,true),
-              new Spot(47,31,12,false),
-              new Spot(48,31,13,false),
-              new Spot(49,32,13,false),
-              new Spot(50,32,13,true),
-              new Spot(51,33,14,false),
-              new Spot(52,33,14,true),
-              new Spot(53,35,15,false),
-              ];
-  this.pot[0].chip = new Chip(id.toString(),'drop')
-  this.whiteTotal = 0;
-  this.rubies = 1;
-  this.exploded = false;
-  this.flaskFull = true;
-  this.playerCoins = 0;
-  this.bought = '';
-  this.rats = 0;
-  this.pointsOrCoins = '';
-  this.message = [''];
-  this.unreadMessages = 0;
-  this.readLast = false;
-  this.bonus = false;
-  this.selector = [];
-  this.savedReds = [];
-  this.bonusDieDrop = 0;
-  this.lessIsMoreWinner = false;
-  this.wellStirredUsed = false;
-  this.secondChance = false;
-  }
+export function Chip(type, number) {
+  return {
+    type:type,
+    number:number
+  };
 }
 
 function createPlayers(num) {
   //console.log("Creating ", num, " player game");
   let players = [];
   for (let k = 0; k < num; k++) {
-    players.push(new Player(k));
+    players.push(NewPlayer(k));
   }
   return players;
 }
@@ -766,7 +667,7 @@ export const Quacks = {
           G.players = messageAll(G.players, "Purple chips are available for purchase this round.");}
         if (G.round===6) {
           for (let i = 0; i < G.players.length; i++) {
-            G.players[i].bag.push(new Chip('white',1));
+            G.players[i].bag.push(Chip('white',1));
           }
           G.players = messageAll(G.players, "Each player receives an additional white 1-chip this round.");
         }
@@ -843,7 +744,7 @@ export const Quacks = {
             moves: {
               useRats: (G, ctx) => {
                 if (G.players[parseInt(ctx.playerID)].rats > 0) {
-                  let newRat = new Chip(ctx.playerID,'rat');
+                  let newRat = Chip(ctx.playerID,'rat');
                   G.players[parseInt(ctx.playerID)].pot[lastFilled(G.players[parseInt(ctx.playerID)].pot)
                     +G.players[parseInt(ctx.playerID)].rats].chip = newRat;
                 }
@@ -1142,7 +1043,7 @@ export const Quacks = {
             return INVALID_MOVE;
           }
           else {
-            G.players[parseInt(ctx.playerID)].bag.push(new Chip(type,number));
+            G.players[parseInt(ctx.playerID)].bag.push(Chip(type,number));
             G.store[type][number]--;
             G.players[parseInt(ctx.playerID)].playerCoins -= chipCost;
             G.players[parseInt(ctx.playerID)].bought = type;
