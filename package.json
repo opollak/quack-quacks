@@ -21,7 +21,7 @@
     "redux-logger": "^3.0.6"
   },
   "scripts": {
-    "start": "node -r esm src/server.js",
+    "start": "node -r esm server.js",
     "client": "react-scripts start",
     "server": "node -r esm src/serverBackend.js",
     "build": "react-scripts build",
