@@ -25,7 +25,7 @@ server.run(PORT, () => {
   console.log('Serving at port: '+PORT);
   server.app.use(
     async (ctx, next) => await serve(frontEndAppBuildPath)(
-      Object.assign(ctx, { path: 'index.js' }),
+      Object.assign(ctx, { path: 'index.html' }),
       next
     )
   );
