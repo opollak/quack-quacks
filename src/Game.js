@@ -731,13 +731,14 @@ export const Quacks = {
     drawPhase: {
       next: 'strongIngredientPhase',
       onBegin: (G, ctx) => {
-        ctx.events.setActivePlayers({all: 'ratStage'});
+        //ctx.events.setActivePlayers({all: 'ratStage'}); moved to turn
         //console.log("draw phase started");
         G.players = messageAll(G.players, "Draw phase has begun! Take your rats and then click your Bag to draw.");
         G.players = messagesRead(G.players);
         },
       endIf: (G,ctx) => (G.playersToDraw<1 && !ctx.activePlayers),
       turn: {
+        onBegin: (G, ctx) => {ctx.events.setActivePlayers({all: 'ratStage'});},
         stages: {
           ratStage:{
             next: 'drawStage',
@@ -788,7 +789,7 @@ export const Quacks = {
             },
           },
           stopDrawingStage: {
-            moveLimit: 1,
+            maxMoves: 1,
             moves: {
               stopDrawing2: (G,ctx) => {
                 if (G.currCard===22) {
@@ -803,7 +804,7 @@ export const Quacks = {
             }
           },
           selectStage: {
-            moveLimit: 1,
+            maxMoves: 1,
             moves: selectorMoves,
             next: 'drawStage'
           },
@@ -836,7 +837,7 @@ export const Quacks = {
           },
           wellStirredStage: { //In this round, you may put the first white chip you draw back into the bag.
             next: 'drawStage',
-            moveLimit: 1,
+            maxMoves: 1,
             moves: {
               wellStirredYes: (G, ctx) => {
                 let p = parseInt(ctx.playerID);
@@ -874,33 +875,33 @@ export const Quacks = {
       moves: selectorMoves,
       turn: {
         order: roundTurnOrder,
-        //moveLimit: 1,
+        //maxMoves: 1,
         },
       endIf: (G, ctx) => (G.currCard!==22),
       },
     schadenfreudePhase: { //If your pot explodes this round, the player to your left (before you) gets any one 2-chip.
         next: 'bonusPhase',
-        onBegin: (G, ctx) => {
-          //console.log("draw phase ended");
-          if (G.currCard===23) {
-            G.players = messageAll(G.players, "If your pot explodes this round, the player to your left (after you) gets any one 2-chip.");
-            G.players = messagesRead(G.players);
-            let n = G.players.length;
-            let activePlayerList = {};
-            for (let i = 0; i < n; i++) {
-              if (G.players[(i+n-1)%n].exploded) {
-                activePlayerList[i.toString()] = { stage: 'buy2ChipStage',};
-                } else {
-                G.cardStage++;
-                }
-              }
-            ctx.events.setActivePlayers({
-              value: activePlayerList
-              });
-            }
-          },
         turn: {
           stages: buy2Chip,
+          onBegin: (G, ctx) => {
+            //console.log("draw phase ended");
+            if (G.currCard===23) {
+              G.players = messageAll(G.players, "If your pot explodes this round, the player to your left (after you) gets any one 2-chip.");
+              G.players = messagesRead(G.players);
+              let n = G.players.length;
+              let activePlayerList = {};
+              for (let i = 0; i < n; i++) {
+                if (G.players[(i+n-1)%n].exploded) {
+                  activePlayerList[i.toString()] = { stage: 'buy2ChipStage',};
+                  } else {
+                  G.cardStage++;
+                  }
+                }
+              ctx.events.setActivePlayers({
+                value: activePlayerList
+                });
+              }
+            },
         },
         endIf: (G, ctx) => (G.currCard!==23||G.cardStage===ctx.numPlayers),
         onEnd: (G, ctx) => {G.cardStage = 0;}
@@ -935,7 +936,7 @@ export const Quacks = {
         },
       turn: {
         order: roundTurnOrder,
-        moveLimit: 1,
+        maxMoves: 1,
         },
       },
     actionPhase:{
@@ -982,7 +983,7 @@ export const Quacks = {
       },
       turn: {
         order: roundTurnOrder,
-        moveLimit: 1,
+        maxMoves: 1,
       },
     },
     pointPhase: {
@@ -1008,7 +1009,7 @@ export const Quacks = {
       },
       turn: {
         order: roundTurnOrder,
-        moveLimit: 1,
+        maxMoves: 1,
       },
     },
     buyPhase: {
@@ -1025,7 +1026,7 @@ export const Quacks = {
       },
       turn: {
         order: roundTurnOrder,
-        moveLimit: 2,
+        maxMoves: 2,
       },
       moves:{
         buyChip: (G, ctx, type, number) => {
