@@ -14,7 +14,6 @@ const roundTurnOrder = {
 };
 
 const buy2Chip = {
-  buy2ChipStage: {
     moves: {
       buyChip: (G, ctx, type, number) => {
         let p = parseInt(ctx.playerID);
@@ -34,9 +33,9 @@ const buy2Chip = {
           G.cardStage++;
         }
       },
-    }
-  },
-}
+    },
+  }
+
 
 const cardStages = {
   justInTimeStage: { //Choose: Take 4 victory points OR remove 1 white 1-chip from your bag.
@@ -85,7 +84,7 @@ const cardStages = {
       },
     },
   },
-  buy2Chip,
+  buy2ChipStage: buy2Chip,
   ratsFriendsStage: { //Choose: Take any one 4-chip OR 1 victory point for each rat tail you get this turn.
     moves: {
       take4Chip: (G, ctx) => {
@@ -135,7 +134,7 @@ const cardStages = {
           return INVALID_MOVE;
         }
         G.players[p].rats -= number;
-        G.players = messageAll(G.players, "Player "+p.toString()+" chose to pass up on "+number.toString()+" rat rails for rubies.");
+        G.players = messageAll(G.players, "Player "+p.toString()+" chose to pass up on "+number.toString()+" rat tails for rubies.");
         ctx.events.endStage();
         G.cardStage++;
       },
@@ -882,7 +881,7 @@ export const Quacks = {
     schadenfreudePhase: { //If your pot explodes this round, the player to your left (before you) gets any one 2-chip.
         next: 'bonusPhase',
         turn: {
-          stages: buy2Chip,
+          stages: {buy2ChipStage: buy2Chip},
           onBegin: (G, ctx) => {
             //console.log("draw phase ended");
             if (G.currCard===23) {
