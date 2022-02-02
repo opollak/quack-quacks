@@ -11,21 +11,23 @@ const Quacks = require('./Game').Quacks;
 const server = Server({
   games: [Quacks],
   origins:[Origins.LOCALHOST_IN_DEVELOPMENT,
-    'https://quack-quacks.herokuapp.com/',
-  'localhost']
+    'https://quack-quacks.herokuapp.com',
+  'http://localhost:8000']
   });
 const PORT = process.env.PORT || 8000;
 
 const frontEndAppBuildPath = path.resolve(__dirname, './build');
-const static_pages = new Koa();
-static_pages.use(serve(frontEndAppBuildPath));
-server.app.use(mount('/', static_pages))
+// const static_pages = new Koa();
+// static_pages.use(serve(frontEndAppBuildPath));
+// server.app.use(mount('/', static_pages))
+// console.log(frontEndAppBuildPath)
+server.app.use(serve(frontEndAppBuildPath, {index: 'index.html'}))
 
 server.run(PORT, () => {
   console.log('Serving at port: '+PORT);
   server.app.use(
     async (ctx, next) => await serve(frontEndAppBuildPath)(
-      Object.assign(ctx, { path: 'index.js' }),
+      Object.assign(ctx, { path: 'index.html' }),
       next
     )
   );
