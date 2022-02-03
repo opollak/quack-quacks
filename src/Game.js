@@ -134,6 +134,7 @@ const cardStages = {
           return INVALID_MOVE;
         }
         G.players[p].rats -= number;
+        G.players[p].rubies += number;
         G.players = messageAll(G.players, "Player "+p.toString()+" chose to pass up on "+number.toString()+" rat tails for rubies.");
         ctx.events.endStage();
         G.cardStage++;
